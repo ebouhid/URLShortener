@@ -11,7 +11,11 @@ export class InMemoryURLRepository {
   async getUrl(hash: string): Promise<Url | null> {
     const url = this.urlDictionary[hash];
 
-    // Let's return a copy of the url object to avoid accidental mutations
-    return url ? { ...url } : null;
+    // Raise error if URL is not found
+    if (!url) {
+      throw new Error("URL not found");
+    } else {
+      return url;
+    }
   }
 }
