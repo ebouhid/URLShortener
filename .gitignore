@@ -1,0 +1,44 @@
+# Node.js
+node_modules/
+
+# TypeScript
+*.tsbuildinfo
+
+# Dependency directories
+/dist/
+/dist-test/
+
+# Environment variables
+.env
+
+# Editor directories and files
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Jest coverage
+coverage/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn
+yarn-error.log
+.pnp.*
+.pnp.js
+
+# Jest testing library
+__snapshots__/
+
+# OS generated files
+.DS_Store
+Thumbs.db
