@@ -19,7 +19,7 @@ const toBase62 = (num: number) => {
 
 // Generate a random base-62 string
 // Based on the storage requirement estimation, we'll need up to 365 billion hashes
-const generateHash = () => {
+export const generateHash = () => {
   const max = 365 * 1000 * 1000 * 1000;
   const num = randomInt(max);
   return toBase62(num);
