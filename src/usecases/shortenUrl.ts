@@ -14,7 +14,7 @@ export class shortenUrlUsecase {
     const urlObj = createURLobject(originalUrl);
 
     // Save the URL object in the repository
-    const savedUrl = this.urlRepository.saveUrl(urlObj);
+    const savedUrl = await this.urlRepository.saveUrl(urlObj);
 
     return savedUrl;
   }

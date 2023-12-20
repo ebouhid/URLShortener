@@ -5,6 +5,7 @@ import {
 } from "./adapters/repositoryAdapter";
 import { shortenUrlUsecase } from "./usecases/shortenUrl";
 import bodyParser from "body-parser";
+import { retrieveUrlUsecase } from "./usecases/retrieveUrl";
 
 const app = express();
 const port = 3000;
@@ -20,7 +21,7 @@ app.get("/", (req, res) => {
   res.send("Hello world!");
 });
 
-app.post("/shorten", (req, res) => {
+app.post("/shorten", async (req, res) => {
   const usecase = new shortenUrlUsecase(urlRepository);
   const originalUrl = req.body.url as string;
   if (!originalUrl) {
@@ -28,7 +29,7 @@ app.post("/shorten", (req, res) => {
     return;
   }
   try {
-    const savedUrl = usecase.perform(originalUrl);
+    const savedUrl = await usecase.perform(originalUrl);
     console.log("Saved URL", savedUrl);
     res.json(savedUrl);
   } catch (error) {
@@ -44,12 +45,14 @@ app.post("/shorten", (req, res) => {
 
 app.get("/retrieve", async (req, res) => {
   const hash = req.body.hash as string;
+  const usecase = new retrieveUrlUsecase(urlRepository);
   if (!hash) {
     res.status(400).json({ error: "Missing hash parameter" });
     return;
   }
   try {
-    const retrievedUrl = await urlRepository.getUrl(hash);
+    const retrievedUrl = await usecase.perform(hash);
+    console.log("Retrieved URL", retrievedUrl);
     res.json(retrievedUrl);
   } catch (error) {
     if (error instanceof Error) {
