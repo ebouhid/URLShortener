@@ -20,12 +20,15 @@ app.get("/", (req, res) => {
   res.send("Hello world!");
 });
 
-app.post("/shorten", async (req, res) => {
-  const usecase = new shortenUrlUsecase();
+app.post("/shorten", (req, res) => {
+  const usecase = new shortenUrlUsecase(urlRepository);
   const originalUrl = req.body.url as string;
+  if (!originalUrl) {
+    res.status(400).json({ error: "Missing URL" });
+    return;
+  }
   try {
-    const shortenedUrl = usecase.perform(originalUrl);
-    const savedUrl = await urlRepository.saveUrl(shortenedUrl);
+    const savedUrl = usecase.perform(originalUrl);
     console.log("Saved URL", savedUrl);
     res.json(savedUrl);
   } catch (error) {
