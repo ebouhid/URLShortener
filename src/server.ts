@@ -6,14 +6,28 @@ import {
 import { shortenUrlUsecase } from "./usecases/shortenUrl";
 import bodyParser from "body-parser";
 import { retrieveUrlUsecase } from "./usecases/retrieveUrl";
+import pgPromise from "pg-promise";
+import * as dotenv from "dotenv";
 
 const app = express();
 const port = 3000;
 
-// Choose the repository type (e.g., InMemory or MongoDB)
-const repositoryType = RepositoryType.InMemory;
+// Get connection string from .env
+dotenv.config();
+const connectionString = process.env.PG_CONNECTION_STRING || "-";
+if (connectionString === "-") {
+  console.error("Missing DATABASE_URL environment variable");
+  process.exit(1);
+}
 
-const urlRepository = createURLrepository(repositoryType);
+// Initialize pg-promise
+const pgp = pgPromise();
+const db = pgp(connectionString);
+
+// Choose the repository type (e.g., InMemory or MongoDB)
+const repositoryType = RepositoryType.PostgreSQL;
+
+const urlRepository = createURLrepository(repositoryType, db, pgp);
 
 app.use(bodyParser.json());
 
