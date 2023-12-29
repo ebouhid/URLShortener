@@ -17,6 +17,10 @@ class PostgresURLRepository implements URLRepository {
 
   // Get URL by hash from the PostgreSQL database
   async getUrl(hash: string): Promise<Url | null> {
+    const url = await this.db.oneOrNone('SELECT * FROM urls WHERE hash = $1', [hash]);
+    if (!url) {
+      throw new Error('URL not found');
+    }
     return this.db.oneOrNone('SELECT * FROM urls WHERE hash = $1', [hash]);
   }
 }
